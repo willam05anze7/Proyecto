@@ -15,7 +15,7 @@ namespace Portal_de_Microcursos_y_Tutoriales.Models
         public string NombreCompleto { get; set; } = string.Empty;
 
         // Propiedades de navegación
-        public ICollection<Inscripcion> Inscripciones { get; set; } = new List<Inscripcion>();
-        public ICollection<LeccionCompletada> LeccionesCompletadas { get; set; } = new List<LeccionCompletada>();
+        public ICollection<Inscripcion> Inscripciones { get; set; } = [];
+        public ICollection<LeccionCompletada> LeccionesCompletadas { get; set; } = [];
     }
 }

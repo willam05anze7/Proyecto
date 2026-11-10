@@ -1,65 +1,63 @@
 @model IEnumerable<Portal_de_Microcursos_y_Tutoriales.Models.Curso>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Cursos disponibles";
 }
 
-<h1>Index</h1>
+<!-- Encabezado de la sección -->
+<div class="page-header mt-4">
+    <h1>Nuestros Cursos</h1>
+    <p class="subtitle">Aprende a tu ritmo con nuestros microcursos y tutoriales</p>
+    <div class="accent-line"></div>
+</div>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Titulo)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Descripcion)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Nivel)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.DuracionMinutos)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.EstaPublicado)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.FechaCreacion)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Titulo)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Descripcion)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Nivel)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DuracionMinutos)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.EstaPublicado)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.FechaCreacion)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
+@if (!Model.Any())
+{
+    <div class="empty-state">
+        <div class="empty-icon">📚</div>
+        <h4>Aún no hay cursos publicados</h4>
+        <p>Vuelve pronto, estamos preparando contenido increíble para ti.</p>
+    </div>
 }
-    </tbody>
-</table>
+else
+{
+    <div class="container pb-5">
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+            @foreach (var curso in Model)
+            {
+                var nivelLower = curso.Nivel.ToLower();
+                var badgeClass = nivelLower.Contains("básico") || nivelLower.Contains("basico") ? "basico"
+                               : nivelLower.Contains("intermedio") ? "intermedio"
+                               : nivelLower.Contains("avanzado") ? "avanzado"
+                               : "default";
+                var horas = curso.DuracionMinutos / 60;
+                var minutos = curso.DuracionMinutos % 60;
+                var duracionTexto = horas > 0
+                    ? (minutos > 0 ? $"{horas}h {minutos}min" : $"{horas}h")
+                    : $"{minutos} min";
+
+                <div class="col">
+                    <div class="curso-card card">
+                        <div class="card-header-gradient"></div>
+                        <div class="card-body">
+                            <span class="badge-nivel @badgeClass mb-2 d-inline-block">
+                                @curso.Nivel
+                            </span>
+                            <h5 class="card-title">@curso.Titulo</h5>
+                            <p class="card-text">@curso.Descripcion</p>
+                        </div>
+                        <div class="card-footer-custom">
+                            <span class="duracion-chip">
+                                ⏱ @duracionTexto
+                            </span>
+                            <a asp-action="Details" asp-route-id="@curso.Id"
+                               class="btn-primary-portal">
+                                Ver curso →
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+}

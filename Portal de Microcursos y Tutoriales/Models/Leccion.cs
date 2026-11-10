@@ -33,6 +33,6 @@ namespace Portal_de_Microcursos_y_Tutoriales.Models
         public Curso? Curso { get; set; }
 
         // Propiedades de navegación
-        public ICollection<LeccionCompletada> LeccionesCompletadas { get; set; } = new List<LeccionCompletada>();
+        public ICollection<LeccionCompletada> LeccionesCompletadas { get; set; } = [];
     }
 }

@@ -37,7 +37,7 @@ namespace Portal_de_Microcursos_y_Tutoriales.Models
         public DateTime FechaCreacion { get; set; } = DateTime.Now;
 
         // Propiedades de navegación
-        public ICollection<Leccion> Lecciones { get; set; } = new List<Leccion>();
-        public ICollection<Inscripcion> Inscripciones { get; set; } = new List<Inscripcion>();
+        public ICollection<Leccion> Lecciones { get; set; } = [];
+        public ICollection<Inscripcion> Inscripciones { get; set; } = [];
     }
 }

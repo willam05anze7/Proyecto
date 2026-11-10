@@ -50,13 +50,11 @@ namespace Portal_de_Microcursos_y_Tutoriales.Controllers
         public IActionResult Create()
         {
             ViewData["CursoId"] = new SelectList(_context.Cursos, "Id", "Nivel");
-            ViewData["UsuarioId"] = new SelectList(_context.ApplicationUsers, "Id", "Id");
+            ViewData["UsuarioId"] = new SelectList(_context.Users, "Id", "Email");
             return View();
         }
 
         // POST: Inscripciones/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,FechaInscripcion,UsuarioId,CursoId")] Inscripcion inscripcion)
@@ -68,7 +66,7 @@ namespace Portal_de_Microcursos_y_Tutoriales.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["CursoId"] = new SelectList(_context.Cursos, "Id", "Nivel", inscripcion.CursoId);
-            ViewData["UsuarioId"] = new SelectList(_context.ApplicationUsers, "Id", "Id", inscripcion.UsuarioId);
+            ViewData["UsuarioId"] = new SelectList(_context.Users, "Id", "Email", inscripcion.UsuarioId);
             return View(inscripcion);
         }
 
@@ -86,13 +84,11 @@ namespace Portal_de_Microcursos_y_Tutoriales.Controllers
                 return NotFound();
             }
             ViewData["CursoId"] = new SelectList(_context.Cursos, "Id", "Nivel", inscripcion.CursoId);
-            ViewData["UsuarioId"] = new SelectList(_context.ApplicationUsers, "Id", "Id", inscripcion.UsuarioId);
+            ViewData["UsuarioId"] = new SelectList(_context.Users, "Id", "Email", inscripcion.UsuarioId);
             return View(inscripcion);
         }
 
         // POST: Inscripciones/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,FechaInscripcion,UsuarioId,CursoId")] Inscripcion inscripcion)
@@ -123,7 +119,7 @@ namespace Portal_de_Microcursos_y_Tutoriales.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["CursoId"] = new SelectList(_context.Cursos, "Id", "Nivel", inscripcion.CursoId);
-            ViewData["UsuarioId"] = new SelectList(_context.ApplicationUsers, "Id", "Id", inscripcion.UsuarioId);
+            ViewData["UsuarioId"] = new SelectList(_context.Users, "Id", "Email", inscripcion.UsuarioId);
             return View(inscripcion);
         }
 

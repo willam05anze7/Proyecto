@@ -1,54 +1,87 @@
 @model Portal_de_Microcursos_y_Tutoriales.Models.Curso
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = Model.Titulo;
+    var horas = Model.DuracionMinutos / 60;
+    var minutos = Model.DuracionMinutos % 60;
+    var duracionTexto = horas > 0
+        ? $"{horas}h {(minutos > 0 ? minutos + "min" : "")}"
+        : $"{minutos} min";
 }
 
-<h1>Details</h1>
+<div class="container mt-4 pb-5">
 
-<div>
-    <h4>Curso</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Titulo)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Titulo)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Descripcion)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Descripcion)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Nivel)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Nivel)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.DuracionMinutos)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.DuracionMinutos)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.EstaPublicado)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.EstaPublicado)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.FechaCreacion)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.FechaCreacion)
-        </dd>
-    </dl>
-</div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+    <!-- Encabezado del curso -->
+    <div class="curso-detail-header">
+        <div class="d-flex flex-wrap gap-2 mb-3">
+            <span class="meta-chip">📚 @Model.Nivel</span>
+            <span class="meta-chip">⏱ @duracionTexto</span>
+            <span class="meta-chip">📅 @Model.FechaCreacion.ToString("MMMM yyyy")</span>
+        </div>
+        <h1>@Model.Titulo</h1>
+        @if (!string.IsNullOrWhiteSpace(Model.Descripcion))
+        {
+            <p class="mt-2 mb-0" style="opacity:0.9; font-size:1.05rem;">@Model.Descripcion</p>
+        }
+    </div>
+
+    <div class="row g-4">
+        <!-- Lecciones -->
+        <div class="col-lg-8">
+            <h4 class="fw-bold mb-3" style="color:var(--text-dark)">
+                📋 Lecciones del curso
+            </h4>
+
+            @if (Model.Lecciones != null && Model.Lecciones.Any())
+            {
+                <div class="lecciones-list">
+                    @foreach (var (leccion, i) in Model.Lecciones.Select((l, i) => (l, i + 1)))
+                    {
+                        <div class="leccion-item">
+                            <div class="leccion-num">@i</div>
+                            <div>
+                                <div class="fw-semibold" style="color:var(--text-dark)">@leccion.Titulo</div>
+                                @if (!string.IsNullOrWhiteSpace(leccion.Contenido))
+                                {
+                                    <div class="text-muted" style="font-size:.85rem">
+                                        @(leccion.Contenido.Length > 80
+                                            ? leccion.Contenido[..80] + "…"
+                                            : leccion.Contenido)
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    }
+                </div>
+            }
+            else
+            {
+                <div class="empty-state" style="padding:2rem 1rem">
+                    <div class="empty-icon" style="font-size:2.5rem">📄</div>
+                    <p>Las lecciones de este curso se publicarán próximamente.</p>
+                </div>
+            }
+        </div>
+
+        <!-- Sidebar de stats -->
+        <div class="col-lg-4">
+            <div class="stat-card mb-3">
+                <div class="stat-value">@(Model.Lecciones?.Count ?? 0)</div>
+                <div class="stat-label">Lecciones incluidas</div>
+            </div>
+            <div class="stat-card mb-3">
+                <div class="stat-value">@duracionTexto</div>
+                <div class="stat-label">Duración total</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" style="font-size:1.3rem">@Model.Nivel</div>
+                <div class="stat-label">Nivel del curso</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="mt-4">
+        <a asp-action="Index" class="btn-primary-portal">← Volver al catálogo</a>
+    </div>
+
 </div>
