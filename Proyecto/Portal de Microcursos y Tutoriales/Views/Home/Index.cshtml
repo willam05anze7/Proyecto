@@ -1,0 +1,46 @@
+﻿@{
+    ViewData["Title"] = "Inicio";
+}
+
+<!-- Hero -->
+<div class="hero-section">
+    <h1>Aprende. Crece. Avanza.</h1>
+    <p>Accede a microcursos y tutoriales diseñados para que aprendas lo que necesitas, cuando quieras.</p>
+    <a asp-controller="Cursos" asp-action="Index" class="btn-hero">
+        Explorar cursos →
+    </a>
+</div>
+
+<!-- Propuesta de valor -->
+<div class="container pb-5">
+    <div class="row g-4 text-center">
+        <div class="col-md-4">
+            <div class="stat-card h-100">
+                <div style="font-size:2.5rem;margin-bottom:.5rem">⚡</div>
+                <div class="fw-bold fs-5 mb-1" style="color:var(--text-dark)">Aprendizaje rápido</div>
+                <p class="text-muted mb-0">Cursos cortos y al punto, diseñados para que aproveches cada minuto.</p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="stat-card h-100">
+                <div style="font-size:2.5rem;margin-bottom:.5rem">🎯</div>
+                <div class="fw-bold fs-5 mb-1" style="color:var(--text-dark)">Contenido práctico</div>
+                <p class="text-muted mb-0">Proyectos y ejercicios reales que puedes aplicar desde el primer día.</p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="stat-card h-100">
+                <div style="font-size:2.5rem;margin-bottom:.5rem">📱</div>
+                <div class="fw-bold fs-5 mb-1" style="color:var(--text-dark)">A tu ritmo</div>
+                <p class="text-muted mb-0">Aprende desde cualquier dispositivo, sin horarios ni presiones.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="text-center mt-5">
+        <a asp-controller="Cursos" asp-action="Index" class="btn-primary-portal"
+           style="padding:.75rem 2.5rem; font-size:1rem; border-radius:50px">
+            Ver todos los cursos
+        </a>
+    </div>
+</div>
