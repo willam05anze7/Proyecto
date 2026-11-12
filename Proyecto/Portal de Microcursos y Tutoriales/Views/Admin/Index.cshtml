@@ -1,0 +1,160 @@
+@model IEnumerable<Portal_de_Microcursos_y_Tutoriales.Models.Curso>
+
+@{
+    ViewData["Title"] = "Panel de Administración";
+}
+
+<div class="container mt-4 pb-5">
+
+    <!-- Encabezado -->
+    <div class="page-header">
+        <h1>⚙️ Panel de Administración</h1>
+        <p class="subtitle">Gestiona cursos, lecciones e inscritos</p>
+        <div class="accent-line"></div>
+    </div>
+
+    <!-- Alertas de éxito -->
+    @if (TempData["Exito"] != null)
+    {
+        <div class="alert alert-success alert-portal alert-dismissible fade show" role="alert">
+            ✅ @TempData["Exito"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
+        </div>
+    }
+
+    <!-- Stats -->
+    <div class="row g-3 mb-4">
+        <div class="col-6 col-md-3">
+            <div class="stat-card">
+                <div class="stat-value">@ViewBag.TotalCursos</div>
+                <div class="stat-label">Total cursos</div>
+            </div>
+        </div>
+        <div class="col-6 col-md-3">
+            <div class="stat-card" style="border-top-color:var(--accent)">
+                <div class="stat-value" style="color:var(--accent)">@ViewBag.CursosPublicados</div>
+                <div class="stat-label">Publicados</div>
+            </div>
+        </div>
+        <div class="col-6 col-md-3">
+            <div class="stat-card" style="border-top-color:#f59e0b">
+                <div class="stat-value" style="color:#f59e0b">@ViewBag.TotalLecciones</div>
+                <div class="stat-label">Lecciones</div>
+            </div>
+        </div>
+        <div class="col-6 col-md-3">
+            <div class="stat-card" style="border-top-color:var(--secondary)">
+                <div class="stat-value" style="color:var(--secondary)">@ViewBag.TotalInscritos</div>
+                <div class="stat-label">Inscritos</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Acciones -->
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h4 class="fw-bold mb-0" style="color:var(--text-dark)">📚 Cursos</h4>
+        <a asp-action="CrearCurso" class="btn-primary-portal">+ Nuevo curso</a>
+    </div>
+
+    @if (!Model.Any())
+    {
+        <div class="empty-state">
+            <div class="empty-icon">📂</div>
+            <h5>No hay cursos todavía</h5>
+            <p>Crea el primer curso para empezar.</p>
+        </div>
+    }
+    else
+    {
+        <div class="table-responsive">
+            <table class="table table-hover align-middle" style="background:#fff; border-radius:var(--radius); overflow:hidden; box-shadow:var(--card-shadow);">
+                <thead style="background:var(--primary); color:#fff;">
+                    <tr>
+                        <th>Título</th>
+                        <th>Nivel</th>
+                        <th class="text-center">Lecciones</th>
+                        <th class="text-center">Inscritos</th>
+                        <th class="text-center">Estado</th>
+                        <th class="text-center">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var curso in Model)
+                    {
+                        <tr>
+                            <td>
+                                <strong>@curso.Titulo</strong>
+                                <div class="text-muted" style="font-size:.8rem">
+                                    @curso.FechaCreacion.ToString("dd/MM/yyyy")
+                                </div>
+                            </td>
+                            <td>
+                                @{
+                                    var nivelLower = curso.Nivel.ToLower();
+                                    var badgeClass = nivelLower.Contains("básico") || nivelLower.Contains("basico") ? "basico"
+                                                   : nivelLower.Contains("intermedio") ? "intermedio"
+                                                   : nivelLower.Contains("avanzado") ? "avanzado"
+                                                   : "default";
+                                }
+                                <span class="badge-nivel @badgeClass">@curso.Nivel</span>
+                            </td>
+                            <td class="text-center">
+                                <a asp-action="Lecciones" asp-route-id="@curso.Id"
+                                   class="text-decoration-none fw-bold" style="color:var(--primary)">
+                                    @(curso.Lecciones?.Count ?? 0)
+                                </a>
+                            </td>
+                            <td class="text-center">
+                                <a asp-action="Inscritos" asp-route-id="@curso.Id"
+                                   class="text-decoration-none fw-bold" style="color:var(--secondary)">
+                                    @(curso.Inscripciones?.Count ?? 0)
+                                </a>
+                            </td>
+                            <td class="text-center">
+                                @if (curso.EstaPublicado)
+                                {
+                                    <span class="badge bg-success">✅ Publicado</span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-secondary">🔒 Borrador</span>
+                                }
+                            </td>
+                            <td class="text-center">
+                                <div class="d-flex gap-1 justify-content-center flex-wrap">
+
+                                    <!-- Publicar / Despublicar -->
+                                    <form asp-action="TogglePublicacion" asp-route-id="@curso.Id"
+                                          method="post" class="d-inline">
+                                        @Html.AntiForgeryToken()
+                                        <button type="submit"
+                                                class="btn btn-sm @(curso.EstaPublicado ? "btn-outline-warning" : "btn-outline-success")"
+                                                title="@(curso.EstaPublicado ? "Despublicar" : "Publicar")">
+                                            @(curso.EstaPublicado ? "🔒" : "🌐")
+                                        </button>
+                                    </form>
+
+                                    <!-- Lecciones -->
+                                    <a asp-action="Lecciones" asp-route-id="@curso.Id"
+                                       class="btn btn-sm btn-outline-primary" title="Gestionar lecciones">📋</a>
+
+                                    <!-- Inscritos -->
+                                    <a asp-action="Inscritos" asp-route-id="@curso.Id"
+                                       class="btn btn-sm btn-outline-secondary" title="Ver inscritos">👥</a>
+
+                                    <!-- Editar -->
+                                    <a asp-action="EditarCurso" asp-route-id="@curso.Id"
+                                       class="btn btn-sm btn-outline-dark" title="Editar">✏️</a>
+
+                                    <!-- Eliminar -->
+                                    <a asp-action="EliminarCurso" asp-route-id="@curso.Id"
+                                       class="btn btn-sm btn-outline-danger" title="Eliminar">🗑️</a>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+</div>

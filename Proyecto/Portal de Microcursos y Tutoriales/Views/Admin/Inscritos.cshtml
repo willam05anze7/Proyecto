@@ -1,0 +1,66 @@
+@model Portal_de_Microcursos_y_Tutoriales.Models.Curso
+
+@{
+    ViewData["Title"] = $"Inscritos — {Model.Titulo}";
+    var inscritos = Model.Inscripciones?.OrderByDescending(i => i.FechaInscripcion).ToList() ?? [];
+}
+
+<div class="container mt-4 pb-5">
+
+    <div class="page-header">
+        <h1>👥 Inscritos</h1>
+        <p class="subtitle">@Model.Titulo</p>
+        <div class="accent-line"></div>
+    </div>
+
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <div>
+            <span class="badge bg-secondary fs-6">@inscritos.Count inscrito(s)</span>
+        </div>
+        <a asp-action="Index" class="btn btn-outline-secondary btn-sm rounded-3">← Volver</a>
+    </div>
+
+    @if (!inscritos.Any())
+    {
+        <div class="empty-state">
+            <div class="empty-icon">🙋</div>
+            <h5>Ningún usuario se ha inscrito aún</h5>
+            <p>Cuando un suscriptor se inscriba en este curso, aparecerá aquí.</p>
+        </div>
+    }
+    else
+    {
+        <div class="table-responsive">
+            <table class="table table-hover align-middle"
+                   style="background:#fff; border-radius:var(--radius); overflow:hidden; box-shadow:var(--card-shadow);">
+                <thead style="background:var(--primary); color:#fff;">
+                    <tr>
+                        <th>#</th>
+                        <th>Nombre</th>
+                        <th>Correo</th>
+                        <th>Fecha de inscripción</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{int num = 1;}
+                    @foreach (var inscripcion in inscritos)
+                    {
+                        <tr>
+                            <td class="text-muted">@num</td>
+                            <td>
+                                <strong>@inscripcion.Usuario?.NombreCompleto</strong>
+                            </td>
+                            <td class="text-muted">@inscripcion.Usuario?.Email</td>
+                            <td>
+                                <span class="text-muted" style="font-size:.88rem">
+                                    @inscripcion.FechaInscripcion.ToString("dd/MM/yyyy HH:mm")
+                                </span>
+                            </td>
+                        </tr>
+                        num++;
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+</div>

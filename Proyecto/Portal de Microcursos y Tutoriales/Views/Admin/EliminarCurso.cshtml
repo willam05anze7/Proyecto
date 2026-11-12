@@ -1,0 +1,46 @@
+@model Portal_de_Microcursos_y_Tutoriales.Models.Curso
+
+@{
+    ViewData["Title"] = "Eliminar Curso";
+}
+
+<div class="container mt-4 pb-5">
+
+    <div class="page-header">
+        <h1>🗑️ Eliminar Curso</h1>
+        <p class="subtitle">Esta acción es irreversible</p>
+        <div class="accent-line"></div>
+    </div>
+
+    <div class="form-card text-center">
+
+        <div style="font-size:4rem; margin-bottom:1rem;">⚠️</div>
+        <h4 class="fw-bold mb-1" style="color:var(--text-dark)">¿Eliminar "@Model.Titulo"?</h4>
+        <p class="text-muted mb-3">
+            Se eliminarán también sus <strong>@(Model.Lecciones?.Count ?? 0) lecciones</strong>
+            y <strong>@(Model.Inscripciones?.Count ?? 0) inscripciones</strong> asociadas.
+        </p>
+
+        <div class="d-flex justify-content-center gap-3 mb-2">
+            <dl class="text-start" style="font-size:.9rem">
+                <dt>Nivel</dt>
+                <dd>@Model.Nivel</dd>
+                <dt>Duración</dt>
+                <dd>@Model.DuracionMinutos min</dd>
+                <dt>Creado</dt>
+                <dd>@Model.FechaCreacion.ToString("dd/MM/yyyy")</dd>
+                <dt>Estado</dt>
+                <dd>@(Model.EstaPublicado ? "Publicado" : "Borrador")</dd>
+            </dl>
+        </div>
+
+        <form asp-action="EliminarCurso" method="post">
+            @Html.AntiForgeryToken()
+            <input type="hidden" name="id" value="@Model.Id" />
+            <div class="d-flex gap-2 justify-content-center">
+                <button type="submit" class="btn btn-danger px-4 rounded-3">Sí, eliminar</button>
+                <a asp-action="Index" class="btn btn-outline-secondary rounded-3">Cancelar</a>
+            </div>
+        </form>
+    </div>
+</div>
