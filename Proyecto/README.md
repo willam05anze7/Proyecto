@@ -2,8 +2,8 @@
 
 ## Integrantes del equipo
 
-- **Armando**
-- **Reyly**
+- **Armando Michel Arce**
+- **Reyly Anze**
 
 ---
 
