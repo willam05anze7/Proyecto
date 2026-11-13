@@ -1,0 +1,91 @@
+@model IEnumerable<Portal_de_Microcursos_y_Tutoriales.Models.Leccion>
+
+@{
+    var curso = ViewBag.Curso as Portal_de_Microcursos_y_Tutoriales.Models.Curso;
+    ViewData["Title"] = $"Lecciones — {curso?.Titulo}";
+    var lista = Model.ToList();
+}
+
+<div class="page-header mt-4">
+    <h1>📋 Lecciones del Curso</h1>
+    <p class="subtitle">@curso?.Titulo</p>
+    <div class="accent-line"></div>
+</div>
+
+@if (TempData["Exito"] != null)
+{
+    <div class="alert alert-success alert-portal alert-dismissible fade show mx-3" role="alert">
+        ✅ @TempData["Exito"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+}
+
+<div class="container pb-5">
+    <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+        <a asp-action="Cursos" class="btn btn-outline-secondary rounded-3">← Volver a Cursos</a>
+        <a asp-action="CrearLeccion" asp-route-cursoId="@curso?.Id" class="btn-primary-portal">
+            + Nueva Lección
+        </a>
+    </div>
+
+    @if (!lista.Any())
+    {
+        <div class="empty-state">
+            <div class="empty-icon">📄</div>
+            <h4>No hay lecciones aún</h4>
+            <a asp-action="CrearLeccion" asp-route-cursoId="@curso?.Id" class="btn-primary-portal mt-2">
+                Agregar primera lección
+            </a>
+        </div>
+    }
+    else
+    {
+        <div class="lecciones-list">
+            @for (int i = 0; i < lista.Count; i++)
+            {
+                var leccion = lista[i];
+                <div class="leccion-item" style="justify-content:space-between">
+                    <div class="d-flex align-items-center gap-3">
+                        <div class="leccion-num">@leccion.Orden</div>
+                        <div>
+                            <div class="fw-semibold" style="color:var(--text-dark)">@leccion.Titulo</div>
+                            <div class="text-muted" style="font-size:.82rem">
+                                @(leccion.Contenido.Length > 70 ? leccion.Contenido[..70] + "…" : leccion.Contenido)
+                            </div>
+                        </div>
+                    </div>
+                    <div class="d-flex gap-1 align-items-center flex-wrap">
+                        <!-- Mover arriba -->
+                        @if (i > 0)
+                        {
+                            <form asp-action="MoverLeccion" method="post" class="d-inline">
+                                @Html.AntiForgeryToken()
+                                <input type="hidden" name="id" value="@leccion.Id" />
+                                <input type="hidden" name="direccion" value="subir" />
+                                <button type="submit" class="btn btn-sm btn-outline-secondary" title="Subir">▲</button>
+                            </form>
+                        }
+                        <!-- Mover abajo -->
+                        @if (i < lista.Count - 1)
+                        {
+                            <form asp-action="MoverLeccion" method="post" class="d-inline">
+                                @Html.AntiForgeryToken()
+                                <input type="hidden" name="id" value="@leccion.Id" />
+                                <input type="hidden" name="direccion" value="bajar" />
+                                <button type="submit" class="btn btn-sm btn-outline-secondary" title="Bajar">▼</button>
+                            </form>
+                        }
+                        <a asp-action="EditarLeccion" asp-route-id="@leccion.Id"
+                           class="btn btn-sm btn-outline-warning" title="Editar">✏️</a>
+                        <form asp-action="EliminarLeccion" method="post" class="d-inline"
+                              onsubmit="return confirm('¿Eliminar esta lección?')">
+                            @Html.AntiForgeryToken()
+                            <input type="hidden" name="id" value="@leccion.Id" />
+                            <button type="submit" class="btn btn-sm btn-outline-danger" title="Eliminar">🗑️</button>
+                        </form>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+</div>

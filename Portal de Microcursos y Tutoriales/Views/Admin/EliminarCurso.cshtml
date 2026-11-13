@@ -1,0 +1,36 @@
+@model Portal_de_Microcursos_y_Tutoriales.Models.Curso
+
+@{
+    ViewData["Title"] = "Eliminar Curso";
+}
+
+<div class="page-header mt-4">
+    <h1>🗑️ Eliminar Curso</h1>
+    <div class="accent-line"></div>
+</div>
+
+<div class="container pb-5">
+    <div class="form-card text-center">
+        <div style="font-size:4rem">⚠️</div>
+        <h4 class="fw-bold mt-2" style="color:var(--text-dark)">¿Estás seguro?</h4>
+        <p class="text-muted mb-4">
+            Vas a eliminar el curso <strong>"@Model.Titulo"</strong> junto con
+            sus <strong>@Model.Lecciones.Count lecciones</strong> y
+            <strong>@Model.Inscripciones.Count inscripciones</strong>.
+            Esta acción no se puede deshacer.
+        </p>
+
+        <div class="d-flex flex-wrap gap-2 justify-content-center">
+            <form asp-action="EliminarCurso" method="post">
+                @Html.AntiForgeryToken()
+                <input type="hidden" name="id" value="@Model.Id" />
+                <button type="submit" class="btn btn-danger px-4 rounded-3">
+                    Sí, eliminar
+                </button>
+            </form>
+            <a asp-action="Cursos" class="btn btn-outline-secondary rounded-3 px-4">
+                Cancelar
+            </a>
+        </div>
+    </div>
+</div>

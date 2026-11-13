@@ -1,0 +1,63 @@
+@model Portal_de_Microcursos_y_Tutoriales.Models.Curso
+
+@{
+    ViewData["Title"] = "Editar Curso";
+}
+
+<div class="page-header mt-4">
+    <h1>✏️ Editar Curso</h1>
+    <div class="accent-line"></div>
+</div>
+
+<div class="container pb-5">
+    <div class="form-card">
+        <form asp-action="EditarCurso" method="post">
+            @Html.AntiForgeryToken()
+            <input type="hidden" asp-for="Id" />
+            <input type="hidden" asp-for="FechaCreacion" />
+
+            <div class="mb-3">
+                <label asp-for="Titulo" class="form-label"></label>
+                <input asp-for="Titulo" class="form-control" />
+                <span asp-validation-for="Titulo" class="text-danger small"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Descripcion" class="form-label"></label>
+                <textarea asp-for="Descripcion" class="form-control" rows="4"></textarea>
+                <span asp-validation-for="Descripcion" class="text-danger small"></span>
+            </div>
+
+            <div class="row g-3 mb-3">
+                <div class="col-md-6">
+                    <label asp-for="Nivel" class="form-label"></label>
+                    <select asp-for="Nivel" class="form-select">
+                        <option value="Básico">Básico</option>
+                        <option value="Intermedio">Intermedio</option>
+                        <option value="Avanzado">Avanzado</option>
+                    </select>
+                    <span asp-validation-for="Nivel" class="text-danger small"></span>
+                </div>
+                <div class="col-md-6">
+                    <label asp-for="DuracionMinutos" class="form-label"></label>
+                    <input asp-for="DuracionMinutos" class="form-control" type="number" min="1" />
+                    <span asp-validation-for="DuracionMinutos" class="text-danger small"></span>
+                </div>
+            </div>
+
+            <div class="mb-4">
+                <div class="form-check form-switch">
+                    <input asp-for="EstaPublicado" class="form-check-input" type="checkbox" role="switch" />
+                    <label asp-for="EstaPublicado" class="form-check-label fw-semibold">Publicado</label>
+                </div>
+            </div>
+
+            <div class="d-flex gap-2">
+                <button type="submit" class="btn-primary-portal">Guardar Cambios</button>
+                <a asp-action="Cursos" class="btn btn-outline-secondary rounded-3">Cancelar</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts { @await Html.PartialAsync("_ValidationScriptsPartial") }

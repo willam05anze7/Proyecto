@@ -1,0 +1,72 @@
+@{
+    ViewData["Title"] = "Panel de Administración";
+}
+
+<div class="page-header mt-4">
+    <h1>⚙️ Panel de Administración</h1>
+    <p class="subtitle">Gestiona cursos, lecciones e inscritos</p>
+    <div class="accent-line"></div>
+</div>
+
+<div class="container pb-5">
+    <!-- Stats -->
+    <div class="row g-4 mb-5">
+        <div class="col-6 col-md-3">
+            <div class="stat-card">
+                <div class="stat-value">@ViewBag.TotalCursos</div>
+                <div class="stat-label">Total cursos</div>
+            </div>
+        </div>
+        <div class="col-6 col-md-3">
+            <div class="stat-card" style="border-top-color:var(--accent)">
+                <div class="stat-value" style="color:var(--accent)">@ViewBag.CursosPublicados</div>
+                <div class="stat-label">Publicados</div>
+            </div>
+        </div>
+        <div class="col-6 col-md-3">
+            <div class="stat-card" style="border-top-color:var(--secondary)">
+                <div class="stat-value" style="color:var(--secondary)">@ViewBag.TotalLecciones</div>
+                <div class="stat-label">Lecciones</div>
+            </div>
+        </div>
+        <div class="col-6 col-md-3">
+            <div class="stat-card" style="border-top-color:#f59e0b">
+                <div class="stat-value" style="color:#f59e0b">@ViewBag.TotalInscritos</div>
+                <div class="stat-label">Inscripciones</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Accesos rápidos -->
+    <div class="row g-4">
+        <div class="col-md-6">
+            <div class="curso-card card h-100">
+                <div class="card-header-gradient"></div>
+                <div class="card-body text-center py-4">
+                    <div style="font-size:3rem">📚</div>
+                    <h5 class="card-title mt-2">Gestión de Cursos</h5>
+                    <p class="card-text">Crear, editar, publicar y eliminar cursos del portal.</p>
+                </div>
+                <div class="card-footer-custom justify-content-center">
+                    <a asp-action="Cursos" class="btn-primary-portal">Ir a Cursos →</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="curso-card card h-100">
+                <div class="card-header-gradient" style="background:linear-gradient(135deg,var(--secondary),#f093fb)"></div>
+                <div class="card-body text-center py-4">
+                    <div style="font-size:3rem">📋</div>
+                    <h5 class="card-title mt-2">Gestión de Lecciones</h5>
+                    <p class="card-text">Agregar y organizar lecciones dentro de cada curso.</p>
+                </div>
+                <div class="card-footer-custom justify-content-center">
+                    <a asp-action="Cursos" class="btn-primary-portal"
+                       style="background:linear-gradient(135deg,var(--secondary),#f093fb)">
+                        Ir a Lecciones →
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
