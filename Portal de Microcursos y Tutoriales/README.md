@@ -27,18 +27,23 @@ La base de datos maneja cinco entidades principales: `Curso`, `Leccion`, `Inscri
 Elegimos el patrón **MVC (Model-View-Controller)** en lugar de Razor Pages por las siguientes razones:
 
 ### 1. Separación clara de responsabilidades
+
 Nuestro proyecto tiene múltiples entidades (Cursos, Lecciones, Inscripciones) con lógica de negocio diferente en cada una. MVC nos permite tener un controlador dedicado por entidad (`CursosController`, `LeccionesController`, `InscripcionesController`, `AdminController`), lo que mantiene el código organizado y fácil de mantener.
 
 ### 2. Área de administración con lógica concentrada
+
 El `AdminController` agrupa toda la funcionalidad del panel de administración: CRUD de cursos, gestión de lecciones con reordenamiento y consulta de inscritos. Con MVC, toda esta lógica queda en un solo controlador decorado con `[Authorize(Roles = "Administrador")]`, controlando el acceso de forma centralizada.
 
 ### 3. Rutas más expresivas
+
 MVC genera rutas del tipo `/Admin/CrearCurso`, `/Admin/Lecciones/5`, `/Cursos/Details/3` que describen la acción y el recurso de forma natural. Razor Pages produciría rutas basadas en el nombre del archivo de página, lo cual resulta menos intuitivo para un portal con múltiples secciones.
 
 ### 4. Reutilización de vistas y lógica compartida
+
 Con MVC podemos pasar diferentes modelos a una misma vista o compartir parciales entre controladores con facilidad, algo útil por ejemplo para el catálogo de cursos que es visible tanto para usuarios autenticados como para visitantes anónimos.
 
 ### Conclusión
+
 Razor Pages es una buena opción para aplicaciones simples con páginas CRUD independientes. Sin embargo, nuestro portal tiene interacciones entre entidades, control de roles y flujos de negocio más complejos (inscripción → acceso a lección → validación de inscripción) que se gestionan de forma más clara y mantenible con la arquitectura MVC.
 
 ---
@@ -56,8 +61,8 @@ El flujo es el siguiente:
 
 ```csharp
 var inscripcion = await _context.Inscripciones
-    .FirstOrDefaultAsync(i => i.UsuarioId == usuarioId
-                            && i.CursoId == leccion.CursoId);
+	.FirstOrDefaultAsync(i => i.UsuarioId == usuarioId
+							&& i.CursoId == leccion.CursoId);
 ```
 
 5. Si la inscripción existe, se muestra la lección normalmente.
@@ -72,7 +77,7 @@ Si el usuario no tiene una inscripción activa para el curso al que pertenece la
 ```csharp
 if (inscripcion == null)
 {
-    return Forbid(); // HTTP 403 – el usuario está autenticado pero no tiene permiso
+	return Forbid(); // HTTP 403 – el usuario está autenticado pero no tiene permiso
 }
 ```
 
@@ -81,7 +86,7 @@ O bien redirige a una página de acceso denegado:
 ```csharp
 if (inscripcion == null)
 {
-    return RedirectToAction("AccesoDenegado", "Home");
+	return RedirectToAction("AccesoDenegado", "Home");
 }
 ```
 
@@ -101,4 +106,4 @@ La validación de inscripción en la base de datos bloquea este escenario porque
 - **No es configurable por el usuario.** A diferencia de ocultar un botón o enlace en la vista (que solo afecta a la interfaz), la comprobación en el controlador es obligatoria y el usuario no puede saltársela.
 - **Funciona con cualquier método de acceso.** Ya sea una petición GET directa desde la barra de direcciones, un enlace externo o una solicitud programática, la validación se aplica en todos los casos.
 
-Este patrón es una práctica estándar de seguridad en aplicaciones web: la interfaz puede ocultar o mostrar opciones según el estado del usuario, pero la **autorización real siempre ocurre en el servidor**.
+Este patrón es una práctica estándar de seguridad en aplicaciones web: la interfaz puede ocultar o mostrar opciones según el estado del usuario, pero la autorización real siempre ocurre en el servidor.
